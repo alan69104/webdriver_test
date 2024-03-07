@@ -2,3 +2,4 @@ selenium
 chromedriver-binary
 gunicorn
 flask
+webdriver-manager
