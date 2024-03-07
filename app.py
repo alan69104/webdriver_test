@@ -24,13 +24,7 @@ driver.quit()
 
 @app.route('/')
 def index():
-    # 在請求處理函數內部使用 WebDriver
-    driver = get_driver()
-    driver.get("https://www.example.com")
-    time.sleep(5)
-    driver.quit()
     return "Hello World"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
-
