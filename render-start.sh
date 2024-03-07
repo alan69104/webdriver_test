@@ -18,6 +18,6 @@ else
 fi
 
 # 確保將 Chrome 的位置添加到啟動命令的 PATH 中
-export PATH="${PATH}:/opt/render/project/.render/chrome/opt/google/chrome"
+export PATH="${PATH}:/opt/render/project/.render/chrome/opt/google/chrome/"; gunicorn app:app;
 
 # 在此添加您自己的構建命令...
