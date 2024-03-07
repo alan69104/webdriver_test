@@ -16,6 +16,4 @@ else
   echo "...Using Chrome from cache"
 fi
 
-export PATH="${PATH}:/opt/render/project/.render/chrome/opt/google/chrome/"; chrome;
-
-# Add your own build commands here.
+export PATH="${PATH}:/opt/render/project/.render/chrome/opt/google/chrome/";
