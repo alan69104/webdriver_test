@@ -1,24 +1,24 @@
 # 載入需要的套件
 from flask import Flask
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 import os
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # 建立一個Chrome的webdriver物件，並指定driver的路徑
-    chrome_driver_path = "/opt/render/project/.render/chrome/opt/google/chrome/chromedriver"
-    browser = webdriver.Chrome(executable_path=chrome_driver_path)
+    # 使用 webdriver-manager 自動下載和管理 Chrome webdriver
+    driver = webdriver.Chrome(ChromeDriverManager().install())
 
     # 連到我的網站
-    browser.get("https://kirin.idv.tw")
+    driver.get("https://kirin.idv.tw")
 
     # 印出網頁的標題
-    title = browser.title
+    title = driver.title
 
     # 關閉瀏覽器
-    browser.quit()
+    driver.quit()
 
     return title
 
