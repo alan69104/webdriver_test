@@ -9,7 +9,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # 使用 webdriver-manager 自動下載和管理 Chrome webdriver
-    driver = webdriver.Chrome(ChromeDriverManager().install())
+    driver = webdriver.Chrome()
 
     # 連到我的網站
     driver.get("https://kirin.idv.tw")
