@@ -8,7 +8,8 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # 建立一個Chrome的webdriver物件，並指定driver的路徑
-    browser = webdriver.Chrome(executable_path=os.environ['PATH'] + ":/opt/render/project/.render/chrome/opt/google/chrome/")
+    chrome_driver_path = "/opt/render/project/.render/chrome/opt/google/chrome/chromedriver"
+    browser = webdriver.Chrome(executable_path=chrome_driver_path)
 
     # 連到我的網站
     browser.get("https://kirin.idv.tw")
