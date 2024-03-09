@@ -23,4 +23,7 @@ CHROME_PATH="/opt/render/project/.render/chrome/opt/google/chrome/chrome"
 export CHROME_PATH
 export PATH="$PATH:$CHROME_PATH"
 
+# 創建 Chrome 執行文件的符號連接到 /usr/bin
+sudo ln -s "$CHROME_PATH" /usr/bin/google-chrome
+
 # 在此添加您自己的構建命令...
