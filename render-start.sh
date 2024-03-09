@@ -23,4 +23,9 @@ CHROME_PATH="/opt/render/project/.render/chrome/opt/google/chrome/google-chrome-
 export CHROME_PATH
 export PATH="$PATH:$CHROME_PATH"
 
+# 調試信息
+echo "CHROME_PATH 設置為: $CHROME_PATH"
+ls -l "$CHROME_PATH"
+which google-chrome-stable
+
 # 在此添加您自己的構建命令...
