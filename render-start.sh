@@ -28,4 +28,5 @@ echo "CHROME_PATH 設置為: $CHROME_PATH"
 ls -l "$CHROME_PATH"
 which chrome
 
+mkdir -p /tmp
 # 在此添加您自己的構建命令...
