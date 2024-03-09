@@ -28,8 +28,11 @@ def get_page_title(url):
         print("An error occurred while getting page title:", e)
         return "Failed to get page title"
     finally:
-        if driver:
-            driver.quit()
+        try:
+            if driver:
+                driver.quit()
+        except Exception as e:
+            print("An error occurred while quitting WebDriver:", e)
 
 @app.route('/')
 def index():
