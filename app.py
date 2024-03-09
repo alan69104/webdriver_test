@@ -1,43 +1,20 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from flask import Flask
 from selenium import webdriver
 
-app = Flask(__name__)
+url = "https://www.youtube.com/"
+keyword = "4k"
+# 開啟 Chrome 瀏覽器
+driver = webdriver.Chrome()
+# 調整瀏覽器視窗大小
+driver.set_window_size(1024, 960)
+# 進入指定網址
+driver.get(url)
 
-def get_driver():
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    driver = webdriver.Chrome(options=options)
-    return driver
+# 等待搜尋結果加載完成
+driver.implicitly_wait(10)
 
-def get_page_title(url):
-    driver = get_driver()
-    if driver is None:
-        return "無法建立 WebDriver"
+# 獲取網頁標題
+page_title = driver.title
+print("網頁標題:", page_title)
 
-    try:
-        driver.get(url)
-        # 使用顯式等待等待頁面標題出現
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'title')))
-        page_title = driver.title
-        return page_title
-    except Exception as e:
-        print("獲取頁面標題時發生錯誤:", e)
-        return "無法獲取頁面標題"
-    finally:
-        try:
-            if driver:
-                driver.quit()
-        except Exception as e:
-            print("退出 WebDriver 時發生錯誤:", e)
-
-@app.route('/')
-def index():
-    url = "https://www.example.com"  # 設置要獲取標題的網頁URL
-    page_title = get_page_title(url)
-    return f"頁面標題: {page_title}"
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+# 關閉瀏覽器
+driver.quit()
