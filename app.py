@@ -5,12 +5,6 @@ from flask import Flask
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    url = "https://www.example.com"  # 设置要获取标题的网页URL
-    page_title = get_page_title(url)
-    return f"Page Title: {page_title}"
-
 def get_page_title(url):
     driver = get_driver()
     if driver is None:
@@ -31,6 +25,11 @@ def get_page_title(url):
                 driver.quit()
         except Exception as e:
             print("An error occurred while quitting WebDriver:", e)
-
+@app.route('/')
+def index():
+    url = "https://www.example.com"  # 设置要获取标题的网页URL
+    page_title = get_page_title(url)
+    return f"Page Title: {page_title}"
+    
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
