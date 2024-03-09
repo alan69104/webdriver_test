@@ -5,18 +5,31 @@ from flask import Flask
 app = Flask(__name__)
 
 def get_driver():
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    driver = webdriver.Chrome(options=options)
-    return driver
+    try:
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')
+        driver = webdriver.Chrome(options=options)
+        return driver
+    except Exception as e:
+        print("An error occurred while creating the WebDriver:", e)
+        return None
 
 def get_page_title(url):
     driver = get_driver()
-    driver.get(url)
-    time.sleep(5)
-    page_title = driver.title
-    driver.quit()
-    return page_title
+    if driver is None:
+        return "Failed to create WebDriver"
+
+    try:
+        driver.get(url)
+        time.sleep(5)
+        page_title = driver.title
+        return page_title
+    except Exception as e:
+        print("An error occurred while getting page title:", e)
+        return "Failed to get page title"
+    finally:
+        if driver:
+            driver.quit()
 
 @app.route('/')
 def index():
