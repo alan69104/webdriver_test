@@ -19,11 +19,8 @@ else
 fi
 
 # 設置 Chrome 執行路徑到環境變數
-CHROME_PATH="/opt/render/project/.render/chrome/opt/google/chrome/chrome"
+CHROME_PATH="/opt/render/project/.render/chrome/opt/google/chrome/google-chrome-stable"
 export CHROME_PATH
 export PATH="$PATH:$CHROME_PATH"
-
-# 創建 Chrome 執行文件的符號連接到當前目錄
-ln -s "$CHROME_PATH" ./chrome
 
 # 在此添加您自己的構建命令...
