@@ -1,20 +1,24 @@
+from flask import Flask
 from selenium import webdriver
+import time
 
-url = "https://www.youtube.com/"
-keyword = "4k"
-# 開啟 Chrome 瀏覽器
-driver = webdriver.Chrome()
-# 調整瀏覽器視窗大小
-driver.set_window_size(1024, 960)
-# 進入指定網址
-driver.get(url)
+app = Flask(__name__)
 
-# 等待搜尋結果加載完成
-driver.implicitly_wait(10)
+def get_driver():
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(options=options)
+    return driver
 
-# 獲取網頁標題
-page_title = driver.title
-print("網頁標題:", page_title)
+@app.route('/')
+def index():
+    # 在請求處理函數內部使用 WebDriver
+    driver = get_driver()
+    driver.get("https://www.example.com")
+    time.sleep(5)
+    title = driver.title  # 取得網頁標題
+    driver.quit()
+    return title
 
-# 關閉瀏覽器
-driver.quit()
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
