@@ -4,6 +4,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from flask import Flask
 
 app = Flask(__name__)
+
+@app.route('/')
+def index():
+    url = "https://www.example.com"  # 设置要获取标题的网页URL
+    page_title = get_page_title(url)
+    return f"Page Title: {page_title}"
+
 def get_page_title(url):
     driver = get_driver()
     if driver is None:
