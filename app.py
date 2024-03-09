@@ -1,29 +1,27 @@
 from selenium import webdriver
 import time
-import os
 from flask import Flask
+
 app = Flask(__name__)
+
 def get_driver():
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
     driver = webdriver.Chrome(options=options)
     return driver
-driver = get_driver()
-# 打開網頁
-driver.get("https://www.example.com")
-# 等待一段時間
-time.sleep(5)
-# 關閉瀏覽器
-driver.quit()
+
+def get_page_title(url):
+    driver = get_driver()
+    driver.get(url)
+    time.sleep(5)
+    page_title = driver.title
+    driver.quit()
+    return page_title
 
 @app.route('/')
 def index():
-    # 在請求處理函數內部使用 WebDriver
-    driver = get_driver()
-    driver.get("https://www.example.com")
-    time.sleep(5)
-    driver.quit()
-    return "Hello World"
+    page_title = get_page_title("https://www.example.com")
+    return f"Page Title: {page_title}"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
