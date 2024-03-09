@@ -1,15 +1,18 @@
 from flask import Flask
 from selenium import webdriver
 import time
+from webdriver_manager.chrome import ChromeDriverManager
 
 app = Flask(__name__)
 
 def get_driver():
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
-    driver = webdriver.Chrome(options=options)
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
     return driver
-
+    
 @app.route('/')
 def index():
     driver = None
