@@ -1,18 +1,6 @@
-from selenium import webdriver
-import time
-from flask import Flask
-
-app = Flask(__name__)
-
-def get_driver():
-    try:
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        driver = webdriver.Chrome(options=options)
-        return driver
-    except Exception as e:
-        print("An error occurred while creating the WebDriver:", e)
-        return None
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 def get_page_title(url):
     driver = get_driver()
@@ -21,7 +9,8 @@ def get_page_title(url):
 
     try:
         driver.get(url)
-        time.sleep(5)
+        # 使用显式等待等待页面标题出现
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'title')))
         page_title = driver.title
         return page_title
     except Exception as e:
@@ -33,11 +22,3 @@ def get_page_title(url):
                 driver.quit()
         except Exception as e:
             print("An error occurred while quitting WebDriver:", e)
-
-@app.route('/')
-def index():
-    page_title = get_page_title("https://www.example.com")
-    return f"Page Title: {page_title}"
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
