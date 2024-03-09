@@ -1,7 +1,9 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from flask import Flask
 
+app = Flask(__name__)
 def get_page_title(url):
     driver = get_driver()
     if driver is None:
@@ -22,3 +24,6 @@ def get_page_title(url):
                 driver.quit()
         except Exception as e:
             print("An error occurred while quitting WebDriver:", e)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
