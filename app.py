@@ -1,5 +1,6 @@
 from flask import Flask
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
 app = Flask(__name__)
@@ -12,12 +13,14 @@ def index():
     chrome_options.add_argument("--disable-gpu")  # Disable GPU acceleration
     chrome_options.add_argument("--no-sandbox")  # Bypass OS security model
 
-    # Set the path for ChromeDriver and Chrome
-    chromedriver_path = '/opt/render/project/.render/chromedriver'
-    chrome_options.binary_location = '/opt/render/project/.render/chrome/opt/google/chrome/google-chrome'
+    # Set the path for ChromeDriver
+    chromedriver_path = '/opt/render/project/.render/chromedriver-linux64/chromedriver'
 
-    # Initialize the Chrome WebDriver with the specified options
-    driver = webdriver.Chrome(executable_path=chromedriver_path, options=chrome_options)
+    # Initialize the Chrome WebDriver service with the ChromeDriver path
+    chrome_service = Service(chromedriver_path)
+
+    # Initialize the Chrome WebDriver with the specified options and service
+    driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
     
     # Example: Open Google and return a simple message
     driver.get("https://www.google.com")
