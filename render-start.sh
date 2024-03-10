@@ -21,7 +21,7 @@ fi
 if [[ ! -f $STORAGE_DIR/chromedriver ]]; then
     echo "...Downloading ChromeDriver"
     wget -P $STORAGE_DIR https://storage.googleapis.com/chrome-for-testing-public/122.0.6261.111/linux64/chromedriver-linux64.zip
-    unzip $STORAGE_DIR/chromedriver-linux64.zip -d $STORAGE_DIR
+    unzip -o $STORAGE_DIR/chromedriver-linux64.zip -d $STORAGE_DIR
     rm $STORAGE_DIR/chromedriver-linux64.zip
 else
     echo "...Using ChromeDriver from cache"
