@@ -9,7 +9,7 @@ app = Flask(__name__)
 def index():
     # Set up Chrome options
     chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Run in headless mode
+    # chrome_options.add_argument("--headless")  # Run in headless mode
     chrome_options.add_argument("--disable-gpu")  # Disable GPU acceleration
     chrome_options.add_argument("--no-sandbox")  # Bypass OS security model
     chrome_options.binary_location = "/opt/render/project/.render/chrome/opt/google/chrome/chrome"  # Specify Chrome binary location
@@ -24,7 +24,7 @@ def index():
     driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
     
     # Navigate to Google and get the page title
-    driver.get("https://www.dcard.tw/f/utaipei")
+    driver.get("https://www.dcard.tw/f")
     page_title = driver.title
     driver.quit()
 
