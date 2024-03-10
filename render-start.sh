@@ -33,10 +33,18 @@ if [[ ! -f $STORAGE_DIR/chromedriver ]]; then
     exit 1
   fi
   echo "Detected ChromeDriver version: $CHROMEDRIVER_VERSION"
-  wget -P $STORAGE_DIR https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
-  unzip $STORAGE_DIR/chromedriver_linux64.zip -d $STORAGE_DIR
-  chmod +x $STORAGE_DIR/chromedriver
-  rm $STORAGE_DIR/chromedriver_linux64.zip
+  CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
+  echo "Downloading ChromeDriver from: $CHROMEDRIVER_URL"
+  wget -P $STORAGE_DIR "$CHROMEDRIVER_URL"
+  if [[ -f $STORAGE_DIR/chromedriver_linux64.zip ]]; then
+    unzip $STORAGE_DIR/chromedriver_linux64.zip -d $STORAGE_DIR
+    chmod +x $STORAGE_DIR/chromedriver
+    rm $STORAGE_DIR/chromedriver_linux64.zip
+    echo "ChromeDriver installed successfully."
+  else
+    echo "Failed to download ChromeDriver."
+    exit 1
+  fi
 else
   echo "...Using ChromeDriver from cache"
 fi
