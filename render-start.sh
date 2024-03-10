@@ -31,9 +31,9 @@ echo "偵測到的 Chrome 版本：122.0.6261.111"
 CHROMEDRIVER_DOWNLOAD_URL="https://storage.googleapis.com/chrome-for-testing-public/122.0.6261.111/linux64/chromedriver-linux64.zip"
 echo "...正在下載指定版本的 ChromeDriver"
 wget -nv -P $STORAGE_DIR "$CHROMEDRIVER_DOWNLOAD_URL" || log_error "ChromeDriver 下載失敗"
-unzip -q $STORAGE_DIR/chromedriver_linux64.zip -d $STORAGE_DIR || log_error "解壓失敗"
+unzip -q $STORAGE_DIR/chromedriver-linux64.zip -d $STORAGE_DIR || log_error "解壓失敗"  # 確保文件名與下載的文件名匹配
 chmod +x $STORAGE_DIR/chromedriver
-rm $STORAGE_DIR/chromedriver_linux64.zip
+rm $STORAGE_DIR/chromedriver-linux64.zip
 echo "ChromeDriver 安裝成功。"
 
 # 將 ChromeDriver 的位置添加到 PATH
