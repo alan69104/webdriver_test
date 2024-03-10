@@ -1,57 +1,43 @@
 #!/usr/bin/env bash
-# exit on error
+# 出錯時退出
 set -o errexit -o pipefail
 
 STORAGE_DIR=/opt/render/project/.render
 
 function log_error {
-  echo "ERROR: $1" >&2
+  echo "錯誤：$1" >&2
   exit 1
 }
 
-echo "Starting deployment..."
+echo "開始部署..."
 
-if [[ ! -d $STORAGE_DIR/chrome ]]; then
-  echo "...Downloading Chrome"
-  mkdir -p $STORAGE_DIR/chrome
-  cd $STORAGE_DIR/chrome
-  wget -nv -P ./ https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb || log_error "Chrome download failed"
-  dpkg -x ./google-chrome-stable_current_amd64.deb $STORAGE_DIR/chrome || log_error "dpkg extract failed"
-  rm ./google-chrome-stable_current_amd64.deb
-  cd - # Return to the previous directory
-else
-  echo "...Using Chrome from cache"
-fi
+# 下載並解壓 Chrome
+CHROME_DOWNLOAD_URL="https://storage.googleapis.com/chrome-for-testing-public/122.0.6261.111/linux64/chrome-linux64.zip"
+echo "...正在下載指定版本的 Chrome"
+mkdir -p $STORAGE_DIR/chrome
+cd $STORAGE_DIR/chrome
+wget -nv "$CHROME_DOWNLOAD_URL" || log_error "Chrome 下載失敗"
+unzip -q chrome-linux64.zip || log_error "解壓失敗"
+rm chrome-linux64.zip
+cd - # 返回之前的目錄
 
-# Set Chrome's location to the PATH
-CHROME_DIR=$STORAGE_DIR/chrome/opt/google/chrome
+# 假設解壓後的 Chrome 可執行檔案位於當前目錄
+CHROME_DIR=$STORAGE_DIR/chrome
 export PATH=$PATH:$CHROME_DIR
 
-echo "Checking Chrome version..."
-CHROME_VERSION=$(google-chrome --product-version | cut -d '.' -f 1-3) || log_error "Chrome version check failed"
-echo "Detected Chrome version: $CHROME_VERSION"
+echo "偵測到的 Chrome 版本：122.0.6261.111"
 
-echo "Checking if ChromeDriver is already installed..."
-if [[ ! -f $STORAGE_DIR/chromedriver ]]; then
-  echo "...Downloading ChromeDriver"
-  CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION") || log_error "ChromeDriver version fetch failed"
-  if [[ -z "$CHROMEDRIVER_VERSION" ]]; then
-    log_error "Failed to fetch ChromeDriver version for Chrome version $CHROME_VERSION"
-  fi
-  echo "Detected ChromeDriver version: $CHROMEDRIVER_VERSION"
-  CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
-  echo "Downloading ChromeDriver from: $CHROMEDRIVER_URL"
-  wget -nv -P $STORAGE_DIR "$CHROMEDRIVER_URL" || log_error "ChromeDriver download failed"
-  unzip -q $STORAGE_DIR/chromedriver_linux64.zip -d $STORAGE_DIR || log_error "Unzip failed"
-  chmod +x $STORAGE_DIR/chromedriver
-  rm $STORAGE_DIR/chromedriver_linux64.zip
-  echo "ChromeDriver installed successfully."
-else
-  echo "...Using ChromeDriver from cache"
-fi
+# 下載並安裝 ChromeDriver
+CHROMEDRIVER_DOWNLOAD_URL="https://storage.googleapis.com/chrome-for-testing-public/122.0.6261.111/linux64/chromedriver-linux64.zip"
+echo "...正在下載指定版本的 ChromeDriver"
+wget -nv -P $STORAGE_DIR "$CHROMEDRIVER_DOWNLOAD_URL" || log_error "ChromeDriver 下載失敗"
+unzip -q $STORAGE_DIR/chromedriver_linux64.zip -d $STORAGE_DIR || log_error "解壓失敗"
+chmod +x $STORAGE_DIR/chromedriver
+rm $STORAGE_DIR/chromedriver_linux64.zip
+echo "ChromeDriver 安裝成功。"
 
-# Set ChromeDriver's location to the PATH
+# 將 ChromeDriver 的位置添加到 PATH
 export PATH=$PATH:$STORAGE_DIR
 
-echo "Deployment script finished."
-# add your own build commands...
+echo "部署腳本執行完畢。"
+# 添加您自己的構建命令...
