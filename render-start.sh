@@ -40,4 +40,3 @@ echo "ChromeDriver 安裝成功。"
 export PATH=$PATH:$STORAGE_DIR
 
 echo "部署腳本執行完畢。"
-# 添加您自己的構建命令...
