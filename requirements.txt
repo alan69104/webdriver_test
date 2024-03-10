@@ -4,3 +4,4 @@ chromedriver-binary
 gunicorn
 flask
 webdriver-manager
+pyautogui
