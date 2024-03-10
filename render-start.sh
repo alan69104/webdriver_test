@@ -11,7 +11,7 @@ if [[ ! -d $STORAGE_DIR/chrome ]]; then
   wget -P ./ https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   dpkg -x ./google-chrome-stable_current_amd64.deb $STORAGE_DIR/chrome
   rm ./google-chrome-stable_current_amd64.deb
-  cd $HOME/project/src # Make sure we return to where we were
+  cd - # Return to the previous directory
 else
   echo "...Using Chrome from cache"
 fi
@@ -20,13 +20,22 @@ fi
 CHROME_DIR=$STORAGE_DIR/chrome/opt/google/chrome
 export PATH=$PATH:$CHROME_DIR
 
+# Check Chrome version
+CHROME_VERSION=$(google-chrome --product-version | cut -d '.' -f 1-3)
+echo "Detected Chrome version: $CHROME_VERSION"
+
 # Install ChromeDriver
 if [[ ! -f $STORAGE_DIR/chromedriver ]]; then
   echo "...Downloading ChromeDriver"
-  CHROME_VERSION=$(google-chrome --product-version | cut -d '.' -f 1-3)
   CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+  if [[ -z "$CHROMEDRIVER_VERSION" ]]; then
+    echo "Failed to fetch ChromeDriver version for Chrome version $CHROME_VERSION"
+    exit 1
+  fi
+  echo "Detected ChromeDriver version: $CHROMEDRIVER_VERSION"
   wget -P $STORAGE_DIR https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
   unzip $STORAGE_DIR/chromedriver_linux64.zip -d $STORAGE_DIR
+  chmod +x $STORAGE_DIR/chromedriver
   rm $STORAGE_DIR/chromedriver_linux64.zip
 else
   echo "...Using ChromeDriver from cache"
