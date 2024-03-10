@@ -12,6 +12,7 @@ def index():
     chrome_options.add_argument("--headless")  # Run in headless mode
     chrome_options.add_argument("--disable-gpu")  # Disable GPU acceleration
     chrome_options.add_argument("--no-sandbox")  # Bypass OS security model
+    chrome_options.binary_location = "/opt/render/project/.render/chrome/opt/google/chrome/chrome"  # 指定 Chrome 二進制文件位置
 
     # Set the path for ChromeDriver
     chromedriver_path = '/opt/render/project/.render/chromedriver-linux64/chromedriver'
