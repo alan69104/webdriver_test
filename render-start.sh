@@ -13,7 +13,7 @@ if [[ ! -d $STORAGE_DIR/chrome ]]; then
   dpkg -x ./google-chrome-stable_current_amd64.deb $STORAGE_DIR/chrome
   rm ./google-chrome-stable_current_amd64.deb
   # Find the version of the extracted Chrome
-  CHROME_VERSION=$(grep -Po '(?<=^Version=).+' $STORAGE_DIR/chrome/opt/google/chrome/chrome)
+  CHROME_VERSION=$(dpkg-deb -f ./google-chrome-stable_current_amd64.deb Version)
   echo "Installed Chrome version: $CHROME_VERSION"
   cd - # Make sure we return to where we were
 else
