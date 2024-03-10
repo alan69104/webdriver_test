@@ -1,29 +1,38 @@
 #!/usr/bin/env bash
-
-# 遇到错误时终止脚本
+# exit on error
 set -o errexit
 
 STORAGE_DIR=/opt/render/project/.render
 
-# ... [省略之前的 Chrome 安装步骤] ...
-
-# 获取 Chrome 主版本号
-CHROME_VERSION=$(google-chrome --product-version | cut -d '.' -f 1-3)
-echo "Chrome 版本: $CHROME_VERSION"
-
-# 获取与 Chrome 兼容的 ChromeDriver 最新版本号
-CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-echo "ChromeDriver 兼容版本: $CHROMEDRIVER_VERSION"
-
-# 安装 ChromeDriver
-if [[ ! -f $STORAGE_DIR/chromedriver ]]; then
-    echo "正在下载 ChromeDriver..."
-    wget -P $STORAGE_DIR "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
-    unzip $STORAGE_DIR/chromedriver_linux64.zip -d $STORAGE_DIR
-    rm $STORAGE_DIR/chromedriver_linux64.zip
-    echo "ChromeDriver 安装完成。"
+if [[ ! -d $STORAGE_DIR/chrome ]]; then
+  echo "...Downloading Chrome"
+  mkdir -p $STORAGE_DIR/chrome
+  cd $STORAGE_DIR/chrome
+  wget -P ./ https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  dpkg -x ./google-chrome-stable_current_amd64.deb $STORAGE_DIR/chrome
+  rm ./google-chrome-stable_current_amd64.deb
+  cd $HOME/project/src # Make sure we return to where we were
 else
-    echo "从缓存中使用 ChromeDriver。"
+  echo "...Using Chrome from cache"
 fi
 
-# ... [省略之后的步骤] ...
+# Set Chrome's location to the PATH
+CHROME_DIR=$STORAGE_DIR/chrome/opt/google/chrome
+export PATH=$PATH:$CHROME_DIR
+
+# Install ChromeDriver
+if [[ ! -f $STORAGE_DIR/chromedriver ]]; then
+  echo "...Downloading ChromeDriver"
+  CHROME_VERSION=$(google-chrome --product-version | cut -d '.' -f 1-3)
+  CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+  wget -P $STORAGE_DIR https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+  unzip $STORAGE_DIR/chromedriver_linux64.zip -d $STORAGE_DIR
+  rm $STORAGE_DIR/chromedriver_linux64.zip
+else
+  echo "...Using ChromeDriver from cache"
+fi
+
+# Set ChromeDriver's location to the PATH
+export PATH=$PATH:$STORAGE_DIR
+
+# add your own build commands...
