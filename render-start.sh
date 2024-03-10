@@ -29,9 +29,10 @@ fi
 
 # be sure to add Chromes location to the PATH as part of your Start Command
 export PATH="${PATH}:/opt/render/project/.render/chrome/opt/google/chrome"
-export PATH="${PATH}:/opt/render/project/.render"
+export PATH="${PATH}:/opt/render/project/.render/chromedriver-linux64"
 
 /opt/render/project/.render/chrome/opt/google/chrome/chrome --version
-/opt/render/project/.render/chromedriver --version
+/opt/render/project/.render/chromedriver-linux64/chromedriver --version
 
+# add your own build commands...
 # add your own build commands...
