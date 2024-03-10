@@ -1,38 +1,40 @@
 from flask import Flask
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
 import os
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    chrome_path = "/opt/render/project/.render/chrome/opt/google/chrome/chrome"
-    chrome_driver_path = "/opt/render/project/.render/chromedriver"
+    # Set up Chrome options
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")  # Run in headless mode (no browser UI)
+    chrome_options.add_argument("--no-sandbox") # Sandbox is not used in headless mode
+    chrome_options.add_argument("--disable-dev-shm-usage") # Overcome limited resource problems
 
-    if os.path.exists(chrome_path) and os.path.exists(chrome_driver_path):
-        try:
-            chrome_options = Options()
-            chrome_options.binary_location = chrome_path
-            driver = webdriver.Chrome(executable_path=chrome_driver_path, options=chrome_options)
-            driver.get("https://www.google.com")
-            print("Chrome launched successfully!")
-            driver.quit()
-        except Exception as e:
-            print(f"Error occurred: {str(e)}")
-            return "Failed to launch Chrome"
-    else:
-        return "Chrome or ChromeDriver not found!"
+    # Set the path for ChromeDriver
+    chrome_driver_path = os.getenv("CHROME_DRIVER_PATH", "/opt/render/project/.render/chromedriver")
 
-    # 添加調試代碼
-    import subprocess
-    cmd = ["ps", "aux"]
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    output, error = proc.communicate()
-    print("Process list:")
-    print(output.decode())
+    # Set the path for Google Chrome if necessary
+    chrome_path = os.getenv("CHROME_PATH", "/opt/render/project/.render/chrome/opt/google/chrome/chrome")
+    chrome_options.binary_location = chrome_path
 
-    return "Chrome launched successfully!"
+    # Initialize the Chrome WebDriver and open Google
+    driver = webdriver.Chrome(executable_path=chrome_driver_path, options=chrome_options)
+    driver.get("https://www.google.com")
+
+    # Optional: Perform a search on Google (just for demonstration)
+    search_box = driver.find_element_by_name('q')  # Find the search box
+    search_box.send_keys('Hello World' + Keys.RETURN)  # Perform a search
+
+    # Close the browser
+    driver.quit()
+
+    # Return a success message
+    return "Google 主頁已打開，並執行了一次搜索。"
 
 if __name__ == "__main__":
+    # Start the Flask app on port 5000
     app.run(host="0.0.0.0", port=5000)
