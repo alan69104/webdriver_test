@@ -3,38 +3,24 @@
 set -o errexit
 
 STORAGE_DIR=/opt/render/project/.render
-CHROME_VERSION="122.0.6261.111"
 
 if [[ ! -d $STORAGE_DIR/chrome ]]; then
   echo "...Downloading Chrome"
   mkdir -p $STORAGE_DIR/chrome
   cd $STORAGE_DIR/chrome
-  wget -nv "https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chrome-linux64.zip"
+  wget -nv -P ./ https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   echo "...Extracting Chrome package"
-  unzip -o -q chrome-linux64.zip
-  rm chrome-linux64.zip
-  cd - # Return to the previous directory
+  dpkg -x ./google-chrome-stable_current_amd64.deb $STORAGE_DIR/chrome
+  rm ./google-chrome-stable_current_amd64.deb
+  # Find the version of the extracted Chrome
+  CHROME_VERSION=$(grep -Po '(?<=^Version=).+' $STORAGE_DIR/chrome/opt/google/chrome/chrome)
+  echo "Installed Chrome version: $CHROME_VERSION"
+  cd - # Make sure we return to where we were
 else
   echo "...Using Chrome from cache"
 fi
 
-# Add Chrome's location to the PATH
-export PATH="${PATH}:${STORAGE_DIR}/chrome"
+# be sure to add Chrome's location to the PATH as part of your Start Command
+export PATH="${PATH}:${STORAGE_DIR}/chrome/opt/google/chrome"
 
-# Download and install the matching version of ChromeDriver
-if [[ ! -f $STORAGE_DIR/chromedriver ]]; then
-  echo "...Downloading ChromeDriver"
-  wget -nv -P $STORAGE_DIR "https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chromedriver-linux64.zip"
-  echo "...Extracting ChromeDriver package"
-  unzip -o -q $STORAGE_DIR/chromedriver-linux64.zip -d $STORAGE_DIR
-  chmod +x $STORAGE_DIR/chromedriver
-  rm $STORAGE_DIR/chromedriver-linux64.zip
-else
-  echo "...Using ChromeDriver from cache"
-fi
-
-# Add ChromeDriver's location to the PATH
-export PATH="${PATH}:${STORAGE_DIR}"
-
-echo "Deployment completed successfully."
-# Add your own build commands below...
+# add your own build commands...
