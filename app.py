@@ -25,10 +25,10 @@ def index():
     
     # Navigate to Google and get the page title
     driver.get("https://www.dcard.tw/f/utaipei")
-    page_title = driver.title
+    page_source = driver.page_source
     driver.quit()
 
-    return f"網頁標題: {page_title}"
+    return f"網頁標題: {page_source}"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
