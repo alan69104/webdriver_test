@@ -24,7 +24,7 @@ def index():
     driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
     
     # Navigate to Google and get the page title
-    driver.get("https://www.dcard.tw/f")
+    driver.get("https://www.youtube.com")
     page_title = driver.title
     driver.quit()
 
