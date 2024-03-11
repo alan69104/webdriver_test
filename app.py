@@ -10,6 +10,7 @@ def index():
     # Set up Chrome options
     chrome_options = Options()
     chrome_options.add_argument("--disable-gpu")  # Disable GPU acceleration
+    chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")  # Bypass OS security model
     chrome_options.binary_location = "/opt/render/project/.render/chrome/opt/google/chrome/chrome"  # Specify Chrome binary location
 
