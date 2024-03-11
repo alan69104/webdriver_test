@@ -2,6 +2,7 @@ from flask import Flask
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+import time
 
 app = Flask(__name__)
 
@@ -25,6 +26,7 @@ def index():
     
     # Navigate to Google and get the page title
     driver.get("https://www.dcard.tw/f/utaipei")
+    time.sleep(10)
     page_source = driver.page_source
     driver.quit()
 
